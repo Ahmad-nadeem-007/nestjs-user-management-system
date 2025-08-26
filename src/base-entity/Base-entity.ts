@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column } from 'typeorm';
+import { PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, BeforeUpdate } from 'typeorm';
 
 export abstract class BaseEntity {
   @PrimaryGeneratedColumn()
@@ -9,4 +9,10 @@ export abstract class BaseEntity {
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+  
+  @BeforeUpdate()
+  updateTimestamp() {
+    this.updatedAt = new Date();
+  }
+
 }

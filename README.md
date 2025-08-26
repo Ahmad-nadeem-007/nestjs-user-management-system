@@ -1,98 +1,255 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS User Management System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A complete user management system built with NestJS, TypeORM, and PostgreSQL. Features include authentication, friend requests, file uploads, and email notifications.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+### 🔐 Authentication & Authorization
+- JWT-based authentication
+- Role-based access control (User/Admin)
+- Email verification
+- Password reset functionality
+- Secure password hashing with bcrypt
+- Access token refresh mechanism
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### 👥 User Management
+- Complete user profile management
+- Location tracking (latitude, longitude)
+- Profile picture handling
+- Pagination support
+- CRUD operations
+- Role-based permissions
 
-## Project setup
+### 🤝 Friend System
+- Send friend requests
+- Accept/Reject friend requests
+- View pending requests
+- List friends
+- Real-time status updates
 
-```bash
-$ npm install
-```
+### 📧 Email System
+- Email verification
+- Password reset emails
+- Beautiful email templates
+- Gmail SMTP integration
+- OTP support
 
-## Compile and run the project
+### 📁 File Management
+- Secure file uploads
+- File type validation
+- Size restrictions
+- File deletion
+- Public/Private access control
 
-```bash
-# development
-$ npm run start
+### 📚 API Documentation
+- Swagger/OpenAPI integration
+- Detailed endpoint documentation
+- Request/Response examples
+- Authentication documentation
 
-# watch mode
-$ npm run start:dev
+## Prerequisites
 
-# production mode
-$ npm run start:prod
-```
+- Node.js (v14 or higher)
+- PostgreSQL (v12 or higher)
+- npm or yarn
+- Gmail account (for email notifications)
 
-## Run tests
+## Installation
 
-```bash
-# unit tests
-$ npm run test
+1. Clone the repository:
+\`\`\`bash
+git clone <repository-url>
+cd user-management-system
+\`\`\`
 
-# e2e tests
-$ npm run test:e2e
+2. Install dependencies:
+\`\`\`bash
+npm install
+\`\`\`
 
-# test coverage
-$ npm run test:cov
-```
+3. Create a .env file in the root directory:
+\`\`\`env
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_DATABASE=user_management
+DB_SYNC=true
 
-## Deployment
+# JWT Configuration
+JWT_SECRET=your-super-secret-key-here
+JWT_EXPIRATION=1d
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+# Email Configuration
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-specific-password
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+# App Configuration
+APP_URL=http://localhost:3000
+PORT=3000
+\`\`\`
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+## Database Schema
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### User Entity
+\`\`\`typescript
+- id: number (Primary Key)
+- name: string
+- email: string (Unique)
+- password: string (Hashed)
+- phone: string (Optional)
+- role: UserRole (ADMIN/USER)
+- status: UserStatus (PENDING/ACTIVE/INACTIVE)
+- isEmailVerified: boolean
+- profilePicture: string
+- latitude: number
+- longitude: number
+- address: string
+- city: string
+- country: string
+- friends: number[] (Array of friend IDs)
+- createdAt: Date
+- updatedAt: Date
+\`\`\`
 
-## Resources
+### FriendRequest Entity
+\`\`\`typescript
+- id: number (Primary Key)
+- senderId: number (Foreign Key)
+- receiverId: number (Foreign Key)
+- status: FriendRequestStatus (PENDING/ACCEPTED/REJECTED)
+- createdAt: Date
+- updatedAt: Date
+\`\`\`
 
-Check out a few resources that may come in handy when working with NestJS:
+## API Endpoints
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Authentication
+- POST /auth/register - Register new user
+- POST /auth/login - User login
+- POST /auth/verify-email - Verify email address
+- POST /auth/forgot-password - Request password reset
+- POST /auth/reset-password - Reset password
+- GET /auth/refresh - Refresh access token
 
-## Support
+### User Management
+- GET /users - Get all users (with pagination)
+- GET /users/:id - Get user by ID
+- PATCH /users/:id - Update user
+- DELETE /users/:id - Delete user (Admin only)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Friend System
+- POST /friend-requests/send - Send friend request
+- POST /friend-requests/:requestId/respond - Respond to friend request
+- GET /friend-requests - Get friend requests
+- GET /friend-requests/friends - Get user's friends
 
-## Stay in touch
+### File Management
+- POST /files/upload - Upload file
+- GET /files/:fileName - Get file
+- DELETE /files/:fileName - Delete file (Admin only)
+- GET /files - List all files (Admin only)
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Security Features
+
+1. **Password Security**
+   - Bcrypt hashing
+   - Configurable salt rounds
+   - Password strength validation
+
+2. **JWT Security**
+   - Token expiration
+   - Refresh token rotation
+   - Blacklist support
+
+3. **File Upload Security**
+   - File type validation
+   - Size limits
+   - Malware scanning
+   - Secure storage
+
+4. **API Security**
+   - Rate limiting
+   - CORS protection
+   - Helmet security headers
+   - Input validation
+
+## Error Handling
+
+The application uses a centralized error handling system with custom exceptions:
+
+\`\`\`typescript
+- BadRequestException
+- UnauthorizedException
+- NotFoundException
+- ConflictException
+\`\`\`
+
+## Email Templates
+
+1. **Verification Email**
+   - Welcome message
+   - Verification link
+   - 24-hour expiration
+
+2. **Password Reset**
+   - Reset instructions
+   - Secure reset link
+   - 1-hour expiration
+
+3. **OTP Email**
+   - 6-digit code
+   - 5-minute expiration
+   - Usage instructions
+
+## Development
+
+1. Start in development mode:
+\`\`\`bash
+npm run start:dev
+\`\`\`
+
+2. Run tests:
+\`\`\`bash
+npm run test
+npm run test:e2e
+\`\`\`
+
+3. Build for production:
+\`\`\`bash
+npm run build
+\`\`\`
+
+## Production Deployment
+
+1. Build the application:
+\`\`\`bash
+npm run build
+\`\`\`
+
+2. Start in production mode:
+\`\`\`bash
+npm run start:prod
+\`\`\`
+
+## Documentation
+
+Access the Swagger documentation at:
+\`\`\`
+http://localhost:3000/api
+\`\`\`
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the MIT License - see the LICENSE file for details.

@@ -8,7 +8,7 @@ export const tryCatch = async <T>(
     return await passedFunction();
   } catch (error) {
     if (error instanceof HttpException) throw error;
-    console.log(extra_info ? extra_info : error);
-    throw new InternalServerErrorException();
+    console.log(extra_info ? extra_info : error)
+    throw new InternalServerErrorException(extra_info || 'Internal server error');
   }
 };
