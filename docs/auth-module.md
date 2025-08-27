@@ -165,6 +165,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     // Validates user credentials
   }
 }
+
 ```
 **Usage:**
 - Handles login authentication

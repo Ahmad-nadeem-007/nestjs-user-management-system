@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
 import { EmailModule } from './email/email.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import { EmailModule } from './email/email.module';
       }),
       inject: [ConfigService],
     }),
-    UserModule,AuthModule,FileModule,EmailModule
+    UserModule,AuthModule,FileModule,EmailModule,ChatModule
   ],
   controllers: [],
   providers: [],
