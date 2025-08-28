@@ -7,7 +7,6 @@ import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { RegisterDto, ResetPasswordDto } from './dto';
 import { MoreThan } from 'typeorm';
-import { UserStatus } from 'src/common/enums/User.enum';
 import { CurrentUserType } from 'src/common/types/CurrentUser.types';
 
 @Injectable()
@@ -48,7 +47,7 @@ export class AuthService {
       sub: user.id,
       role: user.role // Include role in JWT payload
     };
-    const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
+    const accessToken = this.jwtService.sign(payload, { expiresIn: '1d' });
 
     // Generate refresh token
     const refreshToken = crypto.randomBytes(64).toString('hex');
@@ -84,7 +83,7 @@ export class AuthService {
 
     // Generate new tokens
     const payload = { email: user.email, sub: user.id };
-    const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
+    const accessToken = this.jwtService.sign(payload, { expiresIn: '1d' });
     const newRefreshToken = crypto.randomBytes(64).toString('hex');
 
     // Update user's refresh token
@@ -107,7 +106,6 @@ export class AuthService {
         // Update user information
         Object.assign(existingUser, {
           ...registerDto,
-          status: UserStatus.PENDING,
         });
         user = await this.userService.save(existingUser);
       } else {
@@ -118,7 +116,6 @@ export class AuthService {
       // Create new user if doesn't exist
       user = await this.userService.create({
         ...registerDto,
-        status: UserStatus.PENDING,
       });
     }
 
@@ -157,7 +154,6 @@ export class AuthService {
     }
 
     user.isEmailVerified = true;
-    user.status = UserStatus.ACTIVE;
     user.passwordResetToken = null;
     user.passwordResetExpires = null;
     await this.userService.save(user);

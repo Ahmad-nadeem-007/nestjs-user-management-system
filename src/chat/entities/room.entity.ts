@@ -5,10 +5,12 @@ import { ChatMessage } from './chat-message.entity';
 @Entity()
 export class Room extends BaseEntity {
   @Column({ unique: true })
-  roomId: string; // Unique room ID like "room_1_2"
+  roomId: string;
+
+  
 
   @Column()
-  user1Id: number; 
+  user1Id: number;
 
   @Column()
   user2Id: number; // Sender or Receiver 2

@@ -1,4 +1,4 @@
-import { UserRole, UserStatus } from "../enums/User.enum";
+import { UserRole } from "../enums/User.enum";
 
 export interface CurrentUserType {
     id: number;
@@ -9,7 +9,7 @@ export interface CurrentUserType {
     phone?: string;
     password: string;
     role: UserRole; // agar roles fixed hain
-    status: UserStatus; // agar statuses fixed hain
+    status: boolean; // agar statuses fixed hain
     isEmailVerified: boolean;
     profilePicture?: string;
     latitude?: number;

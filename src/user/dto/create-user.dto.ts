@@ -1,6 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, IsString, IsEnum } from 'class-validator';
-import { UserStatus } from 'src/common/enums/User.enum';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsEnum,
+} from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -10,7 +15,7 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Name is required' })
   @IsString({ message: 'Name must be a string' })
   name: string;
-  
+
   @ApiProperty({
     example: 'ahmad@example.com',
     description: 'Unique email address of the user',
@@ -29,8 +34,7 @@ export class CreateUserDto {
   @IsString({ message: 'Phone must be a string' })
   phone?: string;
 
-  @ApiProperty({ enum: UserStatus, description: 'User status', required: false })
+  @ApiProperty({ description: 'User status', required: false })
   @IsOptional()
-  @IsEnum(UserStatus)
-  status?: UserStatus;
+  status?: boolean;
 }

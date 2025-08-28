@@ -11,7 +11,6 @@ export class WsJwtGuard implements CanActivate {
     try {
       const client: Socket = context.switchToWs().getClient();
       const token = this.extractTokenFromHeader(client);
-      console.log('🚀 ~ WsJwtGuard ~ canActivate ~ token:', token);
       if (!token) {
         throw new WsException('Unauthorized');
       }
@@ -22,8 +21,14 @@ export class WsJwtGuard implements CanActivate {
 
       client.data.user = payload;
       return true;
-    } catch {
-      throw new WsException('Unauthorized');
+    } catch (err) {
+      if (err.name === 'TokenExpiredError') {
+        throw new WsException('Unauthorized: Token expired');
+      } else if (err.name === 'JsonWebTokenError') {
+        throw new WsException('Unauthorized: Invalid token');
+      } else {
+        throw new WsException('Unauthorized');
+      }
     }
   }
 

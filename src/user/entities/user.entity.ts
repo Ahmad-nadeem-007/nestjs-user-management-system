@@ -1,7 +1,7 @@
 import { BaseEntity } from 'src/base-entity/Base-entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { FriendRequest } from './friend-request.entity';
-import { UserRole, UserStatus } from 'src/common/enums/User.enum';
+import { UserRole } from 'src/common/enums/User.enum';
 import { ChatMessage } from 'src/chat/entities/chat-message.entity';
 
 
@@ -23,8 +23,8 @@ export class User extends BaseEntity {
   @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   role: UserRole;
 
-  @Column({ type: 'enum', enum: UserStatus, default: UserStatus.PENDING })
-  status: UserStatus;
+  @Column({  default: false })
+  status: boolean;
 
   @Column({ default: false })
   isEmailVerified: boolean;

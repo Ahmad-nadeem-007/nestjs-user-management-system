@@ -102,7 +102,7 @@ PORT=3000
 - password: string (Hashed)
 - phone: string (Optional)
 - role: UserRole (ADMIN/USER)
-- status: UserStatus (PENDING/ACTIVE/INACTIVE)
+- status: UserStatus (true/false)
 - isEmailVerified: boolean
 - profilePicture: string
 - latitude: number

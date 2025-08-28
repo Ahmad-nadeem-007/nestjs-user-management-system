@@ -34,7 +34,6 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Login successful' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async login(@CurrentUser() user: CurrentUserType) {
-    console.log("🚀 ~ AuthController ~ login ~ user:", user)
     return this.authService.login(user);
   }
 

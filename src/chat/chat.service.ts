@@ -24,10 +24,7 @@ export class ChatService {
     return `room_${Math.min(userId1, userId2)}_${Math.max(userId1, userId2)}`;
   }
 
-   async getOrCreateRoom(
-    userId1: number,
-    userId2: number,
-  ): Promise<Room> {
+  async getOrCreateRoom(userId1: number, userId2: number): Promise<Room> {
     const roomId = this.generateRoomId(userId1, userId2);
     let room = await this.roomRepo.findOne({ where: { roomId } });
 
@@ -65,8 +62,20 @@ export class ChatService {
     // Create and save message
     const message = this.chatMessageRepo.create({
       content,
-      sender,
-      receiver,
+      sender: {
+        name: sender.name,
+        email: sender.email,
+        profilePicture: sender?.profilePicture,
+        id: sender?.id,
+        status: sender?.status,
+      },
+      receiver: {
+        name: receiver.name,
+        email: receiver.email,
+        profilePicture: receiver?.profilePicture,
+        id: receiver?.id,
+        status: receiver?.status,
+      },
       room,
       isRead: false,
     });
@@ -172,5 +181,45 @@ export class ChatService {
         b.latestMessage.createdAt.getTime() -
         a.latestMessage.createdAt.getTime(),
     );
+  }
+  async updateUserStaus(userId: number, status: boolean) {
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (user) {
+      user.status = status || false;
+      await this.userRepo.save(user);
+      return user;
+    }
+    return null;
+  }
+  async findRoomsByCurrentUser(userId: number) {
+    console.log('🚀 ~ ChatService ~ findRoomsByCurrentUser ~ userId:', userId);
+
+    if (!userId) throw new NotFoundException('User Id is required');
+    const rooms = await this.roomRepo.find({
+      where: [{ user1Id: userId }, { user2Id: userId }],
+      relations: ['messages'],
+    });
+
+    // const rooms = await this.roomRepo
+    //   .createQueryBuilder('room')
+    //   .leftJoinAndSelect('room.user1Id', 'user1Id')
+    //   .leftJoinAndSelect('room.user2Id', 'user2Id')
+    //   .where('room.user1Id = :userId OR room.user2Id = :userId', { userId })
+    //   .getMany();
+    const transformed = rooms.map((room) => {
+      const latestMessage = room.messages?.slice(-1)[0] || null;
+
+      return {
+        id: room.id,
+        roomId: room.roomId,
+        createdAt: room.createdAt,
+        updatedAt: room.updatedAt,
+        senderId: room.user1Id,
+        receiverId: room.user2Id,
+        chat: latestMessage, // sirf last message ayega
+      };
+    });
+
+    return transformed;
   }
 }
